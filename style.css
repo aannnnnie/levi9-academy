@@ -1,0 +1,22 @@
+img {
+	width: 200px;
+	padding: 5px;
+}
+
+.user {
+	padding: 15px;
+	border-top: 1px solid black;
+}
+
+#user-table {
+	padding: 10px;
+	margin: 10px;
+}
+
+.hidd {
+	display: none;
+}
+
+.show {
+	position: relative;
+}
