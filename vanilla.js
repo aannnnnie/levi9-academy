@@ -4,15 +4,15 @@
 	var accountsList = [];
 
     function createAccount(user) {
-        var row = document.createElement('DIV');
-        row.setAttribute('id', user.id);
-        row.classList.add('user');    	
+        var account = document.createElement('DIV');
+        account.setAttribute('id', user.id);
+        account.classList.add('user');    	
 
-        row.appendChild(createAvatar(user));
-        row.appendChild(createLogin(user));
-        row.appendChild(createDetails(user));
+        account.appendChild(createAvatar(user));
+        account.appendChild(createLogin(user));
+        account.appendChild(createDetails(user));
 
-        return row;
+        return account;
     }
 
     function createAvatar(user) {
@@ -32,43 +32,43 @@
     }
 
     function createDetails(user){
-        var rowDetail = document.createElement('DIV');
-        rowDetail.classList.add('hidd');
+        var accountDetail = document.createElement('DIV');
+        accountDetail.classList.add('hidd');
 
-        var sp_followers = document.createElement('SPAN');
-        sp_followers.textContent = 'followers:  ';
-        rowDetail.appendChild(sp_followers);
+        var spanFollowers = document.createElement('SPAN');
+        spanFollowers.textContent = 'followers:  ';
+        accountDetail.appendChild(spanFollowers);
 
-        var folowwers = document.createElement('A');
-        folowwers.href = user.followers_url;
-        folowwers.textContent = user.followers_url;
-        rowDetail.appendChild(folowwers)
+        var followers = document.createElement('A');
+        followers.href = user.followers_url;
+        followers.textContent = user.followers_url;
+        accountDetail.appendChild(followers)
 
         var br1 = document.createElement('BR');
-        rowDetail.appendChild(br1);
+        accountDetail.appendChild(br1);
 
-        var sp_followings = document.createElement('SPAN');
-        sp_followings.textContent = 'followings:  ';
-        rowDetail.appendChild(sp_followings);
+        var spanFollowings = document.createElement('SPAN');
+        spanFollowings.textContent = 'followings:  ';
+        accountDetail.appendChild(spanFollowings);
 
         var followings = document.createElement('A');
         followings.href = user.followers_url;
         followings.textContent = user.following_url;
-        rowDetail.appendChild(followings)
+        accountDetail.appendChild(followings)
         
         var br2 = document.createElement('BR');
-        rowDetail.appendChild(br2);
+        accountDetail.appendChild(br2);
         
-        var sp_starred = document.createElement('SPAN');
-        sp_starred.textContent = 'starred:  ';
-        rowDetail.appendChild(sp_starred);
+        var spanStarred = document.createElement('SPAN');
+        spanStarred.textContent = 'starred:  ';
+        accountDetail.appendChild(spanStarred);
         
         var starred = document.createElement('A');
         starred.href = user.starred_url;
         starred.textContent = user.starred_url;
-        rowDetail.appendChild(starred)
+        accountDetail.appendChild(starred)
 
-        return rowDetail;
+        return accountDetail;
     }
 
     function showDetail(user) {
@@ -79,9 +79,9 @@
 
         var tableBody = document.createElement('DIV');
 
-        for (var el of list) {
-            tableBody.appendChild(createAccount(el));
-            accountsList.push(el);
+        for (var element of list) {
+            tableBody.appendChild(createAccount(element));
+            accountsList.push(element);
         }
 
         contentElement.appendChild(tableBody);
