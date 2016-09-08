@@ -4,15 +4,15 @@
 	var accountsList = [];
 
     function createAccount(user) {
-        var row = document.createElement('DIV');
-        row.setAttribute('id', user.id);
-        row.classList.add('user');    	
+        var account = document.createElement('DIV');
+        account.setAttribute('id', user.id);
+        account.classList.add('user');    	
 
-        row.appendChild(createAvatar(user));
-        row.appendChild(createLogin(user));
-        row.appendChild(createDetails(user));
+        account.appendChild(createAvatar(user));
+        account.appendChild(createLogin(user));
+        account.appendChild(createDetails(user));
 
-        return row;
+        return account;
     }
 
     function createAvatar(user) {
