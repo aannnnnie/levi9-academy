@@ -1,94 +1,120 @@
  
-	var content = document.getElementById('user-table');
-	var details = document.getElementById('user-detail');
+(function() {
+    var contentElement = document.getElementById('user-table');
 	var accountsList = [];
 
-
-    function account(el) {
+    function createAccount(user) {
         var row = document.createElement('DIV');
-        row.setAttribute('id', el.id);
-        row.classList.add('user');
-        //row.classList.add('col-md-6');
-        var login = document.createElement('DIV');
-        login.innerText = el.login + (el.site_admin ? ' (admin)' : ' (user)');
-        var avatar = document.createElement('IMG');
-        avatar.src = el.avatar_url;
+        row.setAttribute('id', user.id);
+        row.classList.add('user');    	
 
-        var rowDetail = document.createElement('DIV');
-    	rowDetail.classList.add('hidd');
-
-    	var sp_followers = document.createElement('SPAN');
-    	sp_followers.textContent = 'followers:  ';
-    	rowDetail.appendChild(sp_followers);
-
-    	var folowwers = document.createElement('A');
-    	folowwers.href = el.followers_url;
-    	folowwers.textContent = el.followers_url;
-    	rowDetail.appendChild(folowwers)
-
-    	var br = document.createElement('BR');
-    	rowDetail.appendChild(br);
-
-    	var sp_followings = document.createElement('SPAN');
-    	sp_followings.textContent = 'followings:  ';
-    	rowDetail.appendChild(sp_followings);
-
-    	var followings = document.createElement('A');
-    	followings.href = el.followers_url;
-    	followings.textContent = el.following_url;
-    	rowDetail.appendChild(followings)
-    	
-
-        row.appendChild(avatar);
-        row.appendChild(login);
-        row.appendChild(rowDetail);
+        row.appendChild(createAvatar(user));
+        row.appendChild(createLogin(user));
+        row.appendChild(createDetails(user));
 
         return row;
     }
 
-    function detail(el) {
-    	document.getElementById(el.id).querySelector('.hidd').className='show';
+    function createAvatar(user) {
+        var avatar = document.createElement('IMG');
+        avatar.classList.add('img-circle');
+        avatar.src = user.avatar_url;
+
+        return avatar;
     }
 
-    function table(list) {
+    function createLogin(user) {
+        var login = document.createElement('DIV');
+        login.classList.add('font-login');
+        login.innerText = user.login + (user.site_admin ? ' (admin)' : ' (user)');
+
+        return login;
+    }
+
+    function createDetails(user){
+        var rowDetail = document.createElement('DIV');
+        rowDetail.classList.add('hidd');
+
+        var sp_followers = document.createElement('SPAN');
+        sp_followers.textContent = 'followers:  ';
+        rowDetail.appendChild(sp_followers);
+
+        var folowwers = document.createElement('A');
+        folowwers.href = user.followers_url;
+        folowwers.textContent = user.followers_url;
+        rowDetail.appendChild(folowwers)
+
+        var br1 = document.createElement('BR');
+        rowDetail.appendChild(br1);
+
+        var sp_followings = document.createElement('SPAN');
+        sp_followings.textContent = 'followings:  ';
+        rowDetail.appendChild(sp_followings);
+
+        var followings = document.createElement('A');
+        followings.href = user.followers_url;
+        followings.textContent = user.following_url;
+        rowDetail.appendChild(followings)
+        
+        var br2 = document.createElement('BR');
+        rowDetail.appendChild(br2);
+        
+        var sp_starred = document.createElement('SPAN');
+        sp_starred.textContent = 'starred:  ';
+        rowDetail.appendChild(sp_starred);
+        
+        var starred = document.createElement('A');
+        starred.href = user.starred_url;
+        starred.textContent = user.starred_url;
+        rowDetail.appendChild(starred)
+
+        return rowDetail;
+    }
+
+    function showDetail(user) {
+    	document.getElementById(user.id).querySelector('.hidd').className='show';
+    }
+
+    function createTable(list) {
 
         var tableBody = document.createElement('DIV');
 
         for (var el of list) {
-            tableBody.appendChild(account(el));
+            tableBody.appendChild(createAccount(el));
             accountsList.push(el);
         }
 
-        content.appendChild(tableBody);
-        tableBody.addEventListener('click', function(e){
+        contentElement.appendChild(tableBody);
+        tableBody.addEventListener('click', function(event){
 
-
-        	var el = e.target.parentElement.id;
-        	if (document.getElementById(el).querySelector('.show')){
-        		document.getElementById(el).querySelector('.show').className='hidd';
-        	} else {
-		    	if (el){
-		    		var user = accountsList.find(function(a){
-		    			return a.id == el;
+        	var selectedUser = event.target.parentElement.id;
+        	   	if (selectedUser){
+        	   		if (document.getElementById(selectedUser).querySelector('.show')){
+        					document.getElementById(selectedUser).querySelector('.show').className='hidd';
+        			} else {
+		    		var user = accountsList.find(function(account){
+		    			return account.id == selectedUser;
 		    		});
-		    		detail(user);
+		    		showDetail(user);
 		    	};
         	};
         });
     }
 
-    function parsing(accountsList) {
-        var xmlhttp = new XMLHttpRequest();
+    function init (accountsList) {
+        var xmlHttp = new XMLHttpRequest();
         var url = "https://api.github.com/users";
 
-        xmlhttp.onreadystatechange = () => {
-            if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200) {
-                accountsList = JSON.parse(xmlhttp.responseText);
-                table(accountsList);
+        xmlHttp.onreadystatechange = () => {
+            if (xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) {
+                accountsList = JSON.parse(xmlHttp.responseText);
+                createTable(accountsList);
             }
         }
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-parsing();
+        xmlHttp.open("GET", url, true);
+        xmlHttp.send();
+    };
+
+    return init();
+})();
 
