@@ -4,15 +4,15 @@
 	var accountsList = [];
 
     function createAccount(user) {
-        var account = document.createElement('DIV');
-        account.setAttribute('id', user.id);
-        account.classList.add('user');    	
+        var row = document.createElement('DIV');
+        row.setAttribute('id', user.id);
+        row.classList.add('user');    	
 
-        account.appendChild(createAvatar(user));
-        account.appendChild(createLogin(user));
-        account.appendChild(createDetails(user));
+        row.appendChild(createAvatar(user));
+        row.appendChild(createLogin(user));
+        row.appendChild(createDetails(user));
 
-        return account;
+        return row;
     }
 
     function createAvatar(user) {
@@ -32,47 +32,59 @@
     }
 
     function createDetails(user){
-        var accountDetail = document.createElement('DIV');
-        accountDetail.classList.add('hidd');
+        var rowDetail = document.createElement('DIV');
+        rowDetail.classList.add('hidd');
 
-        var spanFollowers = document.createElement('SPAN');
-        spanFollowers.textContent = 'followers:  ';
-        accountDetail.appendChild(spanFollowers);
+        var sp_followers = document.createElement('SPAN');
+        sp_followers.textContent = 'followers:  ';
+        rowDetail.appendChild(sp_followers);
 
-        var followers = document.createElement('A');
-        followers.href = user.followers_url;
-        followers.textContent = user.followers_url;
-        accountDetail.appendChild(followers)
+        var folowwers = document.createElement('A');
+        folowwers.href = user.followers_url;
+        folowwers.textContent = user.followers_url;
+        //folowwers.addEventListener('click', showFollowers())
+        rowDetail.appendChild(folowwers)
 
         var br1 = document.createElement('BR');
-        accountDetail.appendChild(br1);
+        rowDetail.appendChild(br1);
 
-        var spanFollowings = document.createElement('SPAN');
-        spanFollowings.textContent = 'followings:  ';
-        accountDetail.appendChild(spanFollowings);
+        var sp_followings = document.createElement('SPAN');
+        sp_followings.textContent = 'followings:  ';
+        rowDetail.appendChild(sp_followings);
 
         var followings = document.createElement('A');
         followings.href = user.followers_url;
         followings.textContent = user.following_url;
-        accountDetail.appendChild(followings)
+        rowDetail.appendChild(followings)
         
         var br2 = document.createElement('BR');
-        accountDetail.appendChild(br2);
+        rowDetail.appendChild(br2);
         
-        var spanStarred = document.createElement('SPAN');
-        spanStarred.textContent = 'starred:  ';
-        accountDetail.appendChild(spanStarred);
+        var sp_starred = document.createElement('SPAN');
+        sp_starred.textContent = 'starred:  ';
+        rowDetail.appendChild(sp_starred);
         
         var starred = document.createElement('A');
         starred.href = user.starred_url;
         starred.textContent = user.starred_url;
-        accountDetail.appendChild(starred)
+        rowDetail.appendChild(starred)
 
-        return accountDetail;
+        return rowDetail;
     }
 
     function showDetail(user) {
-    	document.getElementById(user.id).querySelector('.hidd').className='show';
+    	document.getElementById(user.id).querySelector('.hidd').style.display = 'block';
+    }
+
+    function toggleDetail(selectedUser) {
+        if (document.getElementById(selectedUser).querySelector('.hidd').style.display == 'block'){
+            document.getElementById(selectedUser).querySelector('.hidd').style.display = 'none';
+        } else {
+            var user = accountsList.find(function(account){
+                return account.id == selectedUser;
+            });
+            showDetail(user);
+        };
     }
 
     function createTable(list) {
@@ -88,16 +100,7 @@
         tableBody.addEventListener('click', function(event){
 
         	var selectedUser = event.target.parentElement.id;
-        	   	if (selectedUser){
-        	   		if (document.getElementById(selectedUser).querySelector('.show')){
-        					document.getElementById(selectedUser).querySelector('.show').className='hidd';
-        			} else {
-		    		var user = accountsList.find(function(account){
-		    			return account.id == selectedUser;
-		    		});
-		    		showDetail(user);
-		    	};
-        	};
+            toggleDetail(selectedUser);
         });
     }
 
