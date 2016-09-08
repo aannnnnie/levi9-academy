@@ -101,7 +101,7 @@
         });
     }
 
-    function init (accountsList) {
+    function init () {
         var xmlHttp = new XMLHttpRequest();
         var url = "https://api.github.com/users";
 
@@ -115,6 +115,6 @@
         xmlHttp.send();
     };
 
-    return init();
+    init();
 })();
 
