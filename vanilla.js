@@ -101,7 +101,7 @@
         });
     }
 
-    function init () {
+    function init (accountsList) {
         var xmlHttp = new XMLHttpRequest();
         var url = "https://api.github.com/users";
 
