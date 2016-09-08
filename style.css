@@ -14,6 +14,9 @@
 	.user{
 		width: 400px;
 	}
+	img:hover{
+		width: 200px;
+	}
 }
 
 @media screen and (min-width: 960px) {
@@ -22,6 +25,9 @@
 	}
 	.user{
 		width: 600px;
+	}
+	img:hover{
+		width: 250px;
 	}
 }
 
@@ -32,18 +38,21 @@
 	.user{
 		width: 700px;
 	}
+	img:hover{
+		width: 300px;
+	}
 }
 
 img {
 	cursor: pointer;
 	padding: 5px;
     transition: width 2s, background-color 2s;
+    opacity: .8;
 }
 
 img:hover{
 	background-color: #FFCCCC;
-    width: 300px;
-    opacity: .7;
+	opacity: 1;
 }
 
 body {
