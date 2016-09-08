@@ -37,6 +37,13 @@
 img {
 	cursor: pointer;
 	padding: 5px;
+    transition: width 2s, background-color 2s;
+}
+
+img:hover{
+	background-color: #FFCCCC;
+    width: 300px;
+    opacity: .7;
 }
 
 body {
