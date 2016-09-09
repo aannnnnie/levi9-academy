@@ -1,7 +1,9 @@
  
 (function() {
     var contentElement = document.getElementById('user-table');
+    var detailElement = document.getElementById('user-detail')
 	var accountsList = [];
+    var followersList = [];
 
     function createAccount(user) {
         var account = document.createElement('DIV');
@@ -10,7 +12,6 @@
 
         account.appendChild(createAvatar(user));
         account.appendChild(createLogin(user));
-        account.appendChild(createDetails(user));
 
         return account;
     }
@@ -31,60 +32,26 @@
         return login;
     }
 
-    function createDetails(user){
-        var rowDetail = document.createElement('DIV');
-        rowDetail.classList.add('hidd');
-
-        var sp_followers = document.createElement('SPAN');
-        sp_followers.textContent = 'followers:  ';
-        rowDetail.appendChild(sp_followers);
-
-        var folowwers = document.createElement('A');
-        folowwers.href = user.followers_url;
-        folowwers.textContent = user.followers_url;
-        //folowwers.addEventListener('click', showFollowers())
-        rowDetail.appendChild(folowwers)
-
-        var br1 = document.createElement('BR');
-        rowDetail.appendChild(br1);
-
-        var sp_followings = document.createElement('SPAN');
-        sp_followings.textContent = 'followings:  ';
-        rowDetail.appendChild(sp_followings);
-
-        var followings = document.createElement('A');
-        followings.href = user.followers_url;
-        followings.textContent = user.following_url;
-        rowDetail.appendChild(followings)
-        
-        var br2 = document.createElement('BR');
-        rowDetail.appendChild(br2);
-        
-        var sp_starred = document.createElement('SPAN');
-        sp_starred.textContent = 'starred:  ';
-        rowDetail.appendChild(sp_starred);
-        
-        var starred = document.createElement('A');
-        starred.href = user.starred_url;
-        starred.textContent = user.starred_url;
-        rowDetail.appendChild(starred)
-
-        return rowDetail;
+    function constructDetails(followersList, selectedUserId){
+        var userDetails = document.createElement('DIV')
+        var selectedUser = document.getElementById(selectedUserId)
+        followersList.forEach(function(follower){
+            var folowerLink = document.createElement('A');
+            folowerLink.href = follower.url;
+            folowerLink.textContent = follower.login;
+            folowerLink.classList.add('element');
+            userDetails.appendChild(folowerLink);
+        })
+        selectedUser.appendChild(userDetails);        
     }
 
-    function showDetail(user) {
-    	document.getElementById(user.id).querySelector('.hidd').style.display = 'block';
-    }
-
-    function toggleDetail(selectedUser) {
-        if (document.getElementById(selectedUser).querySelector('.hidd').style.display == 'block'){
-            document.getElementById(selectedUser).querySelector('.hidd').style.display = 'none';
+    function toggleDetail(selectedId) {
+        var selectedUser = document.getElementById(selectedId).lastChild;
+        if (selectedUser.classList == 'hidden'){
+            selectedUser.classList.remove('hidden');
         } else {
-            var user = accountsList.find(function(account){
-                return account.id == selectedUser;
-            });
-            showDetail(user);
-        };
+            selectedUser.classList.add('hidden');
+        }            
     }
 
     function createTable(list) {
@@ -98,10 +65,38 @@
 
         contentElement.appendChild(tableBody);
         tableBody.addEventListener('click', function(event){
-
-        	var selectedUser = event.target.parentElement.id;
-            toggleDetail(selectedUser);
+        	var selectedUser = event.target.parentElement;
+            var selectedUserId = event.target.parentElement.id;
+            if (selectedUserId){
+                if (document.getElementById(selectedUserId).querySelector('A')) {
+                    if (selectedUserId && selectedUserId != 'user-table'){
+                        toggleDetail(selectedUserId);
+                    };       
+                } else {
+                    fetchUserDetails(accountsList[selectedUserId].followers_url, selectedUserId);
+                };
+            };            
         });
+    }
+
+    function fetchUserDetails(followersUrl, selectedUserId){
+        let request = new XMLHttpRequest();
+        request.onreadystatechange = () => {
+        if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+                followersData = JSON.parse(request.responseText);
+                var followersList = followersData.map(function(follower){
+                    return {
+                        login: follower.login,
+                        url: follower.html_url
+                    };
+                });
+                constructDetails(followersList, selectedUserId); 
+            }
+        }
+
+        request.open("GET", followersUrl , true);
+        request.send();
+    
     }
 
     function init (accountsList) {
