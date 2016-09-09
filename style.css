@@ -71,12 +71,16 @@ body {
 	margin: 10px;
 }
 
-.hidd {
-	display: none;
-}
-
 .font-login {
 	font-weight: bold;
 	font-size: 1.2em;
 	font-variant: small-caps;
+}
+
+.element::after{
+	content: ', ';
+}
+
+.element:last-child:after { 
+	content: '';
 }
