@@ -1,7 +1,7 @@
  
 (function() {
     var contentElement = document.getElementById('user-table');
-	var accountsList = [];
+    var accountsList = [];
 
     function createAccount(user) {
         var account = document.createElement('DIV');
